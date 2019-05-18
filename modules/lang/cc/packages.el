@@ -12,6 +12,9 @@
   (when (featurep! :completion company)
     (package! company-glsl :recipe (:fetcher github :repo "Kaali/company-glsl"))))
 
+(when (featurep! +ggtags)
+  (package! gxref))
+
 (if (featurep! +lsp)
     (package! ccls)
   (when (package! irony)

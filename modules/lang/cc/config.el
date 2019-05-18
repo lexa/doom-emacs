@@ -233,3 +233,12 @@ This is ignored by ccls.")
     (setq-local company-lsp-async t)
     (setq-local company-lsp-cache-candidates nil)
     (lsp)))
+
+;;
+;; GGTAGS
+
+(def-package! gxref
+  :when (featurep! +ggtags)
+  :after xref
+  :init
+  (add-to-list 'xref-backend-functions 'gxref-xref-backend))
