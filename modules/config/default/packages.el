@@ -6,3 +6,5 @@
 
 (unless (featurep! :editor evil)
   (package! expand-region))
+
+(package! zop-to-char)

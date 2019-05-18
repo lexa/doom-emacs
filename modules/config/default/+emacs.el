@@ -23,3 +23,6 @@
 
 (when (featurep! +bindings)
   (load! "+emacs-bindings"))
+
+(def-package! zop-to-char
+  :commands zop-to-char)
