@@ -1,14 +1,35 @@
 ;;; config/default/+emacs-bindings.el -*- lexical-binding: t; -*-
 
 ;; Sensible deafult key bindings for non-evil users
-(setq doom-leader-alt-key "C-c"
+(setq doom-leader-alt-key "M-m"
       doom-localleader-alt-key "C-c l")
 
 ;; persp-mode and projectile in different prefixes
-(setq persp-keymap-prefix (kbd "C-c w"))
+(setq persp-keymap-prefix (kbd "M-m l"))
 (after! projectile
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  (define-key projectile-mode-map (kbd "M-m p") 'projectile-command-map))
 
+
+(map! "<S-left>" #'windmove-left
+      "<S-right>" #'windmove-right
+      "<S-up>" #'windmove-up
+      "<S-down>" #'windmove-down
+
+      "M-g g" #'avy-goto-line
+
+      "s-q" #'avy-goto-char
+      (:when (featurep! :editor multiple-cursors)
+        "C->" #'mc/mark-next-like-this
+        "C-<" #'mc/mark-previous-like-this
+        "C-c C-<" #'mc/mark-all-like-this-dwim
+        )
+
+      "<C-up>" #'scroll-down-line
+      "<C-down>" #'scroll-up-line
+      "<f5>" #'magit-status
+
+      "M-z" #'zop-to-char
+)
 
 ;;
 ;;; Autoloads
@@ -22,8 +43,8 @@
 (map! :leader
       :desc "Find file in project"        "C-f" #'projectile-find-file
       :desc "Evaluate line/region"        "e"   #'+eval/line-or-region
-      :desc "Open scratch buffer"         "x"   #'doom/open-scratch-buffer
-      :desc "Open project scratch buffer" "X"   #'doom/switch-to-scratch-buffer
+      :desc "Open scratch buffer"         "bs"  #'doom/open-scratch-buffer
+      :desc "Open project scratch buffer" "X"   #'doom/open-project-scratch-buffer
 
       (:when (featurep! :term term)
         :desc "Terminal"              "`" #'+term/open
@@ -115,6 +136,7 @@
           :desc "Jump to previous hunk"     "p"   #'git-gutter:previous-hunk)
         (:when (featurep! :tools magit)
           :desc "Magit dispatch"            "/"   #'magit-dispatch
+          :desc "Magit file dispatch"       "d"   #'magit-file-dispatch
           :desc "Forge dispatch"            "'"   #'forge-dispatch
           :desc "Magit status"              "g"   #'magit-status
           :desc "Magit file delete"         "x"   #'magit-file-delete
