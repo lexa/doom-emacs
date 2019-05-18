@@ -140,6 +140,8 @@ prevent the popup(s) from messing up the UI (or vice versa)."
        :vslot -4 :size 0.35 :autosave t :select t :modeline t :quit nil :ttl t)
       ("^\\*Man "
        :vslot -5 :size 0.45 :select t :quit t :ttl 0)
+      ("^\\*Youtube MPV\\*"
+       :side bottom :size 0.25 :vslot -4 :ttl 0 :quit t)
       ("^\\*Customize"
        :slot 2 :side right :select t :quit t)
       ("^ \\*undo-tree\\*"

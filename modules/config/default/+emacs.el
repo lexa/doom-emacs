@@ -26,3 +26,9 @@
 
 (def-package! zop-to-char
   :commands zop-to-char)
+
+;; Open youtube URLs in mpv
+;(load! "funcs")
+(setq browse-url-browser-function
+      '(("https?://.*\\.youtube.com/watch\\?v=" . (lambda (url &rest args) (async-shell-command (concat "mpv \'" url"\'") "*Youtube MPV*")))
+        (".*" . browse-url-default-browser)))
