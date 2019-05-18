@@ -41,7 +41,7 @@ following:
   "Return a scratchpad buffer in major MODE."
   (let* ((buffer-name (if project-name
                           (format "*doom:scratch (%s)*" project-name)
-                        "*doom:scratch*"))
+                        "*scratch*"))
          (buffer (get-buffer buffer-name)))
     (with-current-buffer (get-buffer-create buffer-name)
       (unless buffer
@@ -138,7 +138,7 @@ window."
 (defun doom/revert-scratch-buffer ()
   "Revert scratch buffer to last persistent state."
   (interactive)
-  (unless (string-match-p "^\\*doom:scratch" (buffer-name))
+  (unless (string-match-p "^\\*(doom:)?scratch" (buffer-name))
     (user-error "Not in a scratch buffer"))
   (when (doom--load-persistent-scratch-buffer doom-scratch-current-project)
     (message "Reloaded scratch buffer")))
