@@ -21,6 +21,23 @@
 (setq
  split-height-threshold nil
  split-width-threshold 140)
+
+;; calendar localization
+(def-package! calendar
+  :config (progn (calendar-set-date-style 'european)
+                 (setq
+                  calendar-week-start-day 1
+                  calendar-intermonth-text
+                  '(propertize
+                    (format "%2d"
+                            (car
+                             (calendar-iso-from-absolute
+                              (calendar-absolute-from-gregorian (list month day year)))))
+                    'font-lock-face 'calendar-iso-week-face)
+                 calendar-intermonth-header (propertize "KW"
+                                                              'font-lock-face 'font-lock-keyword-face))
+                 (copy-face 'default 'calendar-iso-week-face)
+                 (set-face-attribute 'calendar-iso-week-face nil :foreground "pink")))
 ;;
 ;;; Keybinds
 (setq projectile-use-git-grep t)
