@@ -17,6 +17,10 @@
   (advice-add #'doom/escape :before #'doom*quit-expand-region))
 
 
+;; Prefer vertial split
+(setq
+ split-height-threshold nil
+ split-width-threshold 140)
 ;;
 ;;; Keybinds
 (setq projectile-use-git-grep t)
