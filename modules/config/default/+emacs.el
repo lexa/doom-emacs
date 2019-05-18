@@ -19,6 +19,7 @@
 
 ;;
 ;;; Keybinds
+(setq projectile-use-git-grep t)
 
 (when (featurep! +bindings)
   (load! "+emacs-bindings"))
