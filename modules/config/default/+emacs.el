@@ -6,9 +6,6 @@
 ;;
 ;;; Reasonable defaults
 
-(setq shift-select-mode t)
-(delete-selection-mode +1)
-
 (def-package! expand-region
   :commands (er/contract-region er/mark-symbol er/mark-word)
   :config
