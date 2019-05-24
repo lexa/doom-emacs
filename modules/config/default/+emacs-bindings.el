@@ -275,7 +275,7 @@
       "C-x b"       #'persp-switch-to-buffer
       (:when (featurep! :completion ivy)
         "C-x 4 b"   #'+ivy/switch-workspace-buffer-other-window)
-      "C-x C-b"     #'ibuffer-list-buffers
+      "C-x C-b"     #'ibuffer
       "C-x B"       #'switch-to-buffer
       "C-x 4 B"     #'switch-to-buffer-other-window
       "C-x k"       #'doom/kill-this-buffer-in-all-windows
