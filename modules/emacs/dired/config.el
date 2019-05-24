@@ -46,7 +46,9 @@
   :hook (dired-after-readin . dired-k-no-revert)
   :config
   (setq dired-k-style 'git
-        dired-k-padding 1)
+        dired-k-padding 1
+;        dired-k-human-readable t
+        )
 
   ;; Don't highlight based on mtime, this interferes with diredfl and is more
   ;; confusing than helpful.
