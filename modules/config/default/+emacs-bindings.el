@@ -278,7 +278,7 @@
       "C-x C-b"     #'ibuffer-list-buffers
       "C-x B"       #'switch-to-buffer
       "C-x 4 B"     #'switch-to-buffer-other-window
-      "C-x K"       #'doom/kill-this-buffer-in-all-windows
+      "C-x k"       #'doom/kill-this-buffer-in-all-windows
 
       ;;; company-mode
       "C-;" #'+company/complete
