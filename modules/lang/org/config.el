@@ -7,7 +7,7 @@
     ;; org-bbdb
     org-bibtex
     org-docview
-    ;; org-gnus
+    org-gnus
     org-info
     ;; org-irc
     ;; org-mhe
