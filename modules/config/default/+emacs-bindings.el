@@ -16,6 +16,7 @@
       "<S-down>" #'windmove-down
 
       "M-g g" #'avy-goto-line
+      "C-c a" #'org-agenda
 
       "s-q" #'avy-goto-char
       (:when (featurep! :editor multiple-cursors)
