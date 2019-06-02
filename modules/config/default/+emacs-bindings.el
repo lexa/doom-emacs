@@ -30,6 +30,8 @@
       "<f5>" #'magit-status
 
       "M-z" #'zop-to-char
+
+      "<f7>" #'calc-dispatch
 )
 
 ;;
