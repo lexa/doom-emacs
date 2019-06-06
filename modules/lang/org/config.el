@@ -91,6 +91,26 @@
    org-agenda-start-day "-3d"))
 
 
+(defun +org|setup-agenda-custom-command ()
+  "Set up custom commands"
+  (setq org-agenda-custom-commands
+   (quote
+    (("n" "Agenda and all TODOs"
+      ((agenda "" nil)
+       (alltodo "" nil))
+      nil)
+     ("x" "All non-scheduled entries" alltodo ""
+      ((org-agenda-skip-function
+        (quote
+         (org-agenda-skip-entry-if
+          (quote scheduled)
+          (quote deadline))))
+       (org-agenda-overriding-header "Tasks without set timeframe")
+       (org-agenda-sorting-strategy
+        (quote
+         (priority-down))))))))
+  )
+
 (defun +org|setup-custom-links ()
   "Set up custom org links."
   (setq org-link-abbrev-alist
@@ -494,6 +514,7 @@ conditions where a window's buffer hasn't changed at the time this hook is run."
   (+org|setup-keybinds)
   (+org|setup-hacks)
   (+org|setup-custom-links)
+  (+org|setup-agenda-custom-command)
 
   (add-hook 'org-open-at-point-functions #'doom|set-jump)
 
