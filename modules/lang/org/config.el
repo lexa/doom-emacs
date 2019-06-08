@@ -162,6 +162,13 @@
 (defun +org|setup-ui ()
   "Configures the UI for `org-mode'."
   (setq-default
+   org-agenda-category-icon-alist
+   `(
+     ("TODO" ( ,(all-the-icons-faicon "check-square") . (width 64)))
+     ("emacs" "/usr/share/icons/hicolor/16x16/apps/emacs.png" nil nil :scale 100)
+     ("finance" ( ,(all-the-icons-faicon "eur") . (width 64)))
+     ("german" ( ,(all-the-icons-material "assignment") . (width 64)))
+     ("" ( ,(all-the-icons-octicon "eye") . (width 64))))
    org-adapt-indentation nil
    org-cycle-include-plain-lists t
    org-eldoc-breadcrumb-separator " → "
