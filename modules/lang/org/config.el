@@ -91,24 +91,58 @@
    org-agenda-start-day "-3d"))
 
 
+;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
+(defun my-org-agenda-skip-all-siblings-but-first ()
+  "Skip all but the first non-done entry."
+  (let (should-skip-entry)
+    (unless (org-current-is-todo)
+      (setq should-skip-entry t))
+    (save-excursion
+      (while (and (not should-skip-entry) (org-goto-sibling t))
+        (when (org-current-is-todo)
+          (setq should-skip-entry t))))
+    (when should-skip-entry
+      (or (outline-next-heading)
+          (goto-char (point-max))))))
+
+(defun org-current-is-todo ()
+  (string= "TODO" (org-get-todo-state)))
+
 (defun +org|setup-agenda-custom-command ()
   "Set up custom commands"
   (setq org-agenda-custom-commands
    (quote
-    (("n" "Agenda and all TODOs"
-      ((agenda "" nil)
-       (alltodo "" nil))
-      nil)
-     ("x" "All non-scheduled entries" alltodo ""
-      ((org-agenda-skip-function
-        (quote
-         (org-agenda-skip-entry-if
-          (quote scheduled)
-          (quote deadline))))
-       (org-agenda-overriding-header "Tasks without set timeframe")
-       (org-agenda-sorting-strategy
-        (quote
-         (priority-down))))))))
+    (("g" "GTD"
+      ((agenda "" ((org-agenda-span +2)
+                   (org-agenda-start-on-weekday nil)
+                   (org-agenda-start-day "today")))
+       (todo "" ((org-agenda-files (list "inbox.org"))
+                 (org-agenda-overriding-header "Unsorted Inbox")
+                 ))
+       (todo "" ((org-agenda-files (list "gtd.org"))
+                 (org-agenda-prefix-format " %i %-12:c")
+                 (org-agenda-overriding-header "Next action")
+                 (org-agenda-sorting-strategy (list 'tag-up))
+                 (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)
+                 ))
+       ))
+
+     ("x" "Stuff"
+      ((tags "TIMESINK"
+       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+        (org-agenda-overriding-header "Perpetually wating tasks"))
+                  )
+       (alltodo ""
+                ((org-agenda-skip-function
+                  (quote (or
+                          (org-agenda-skip-subtree-if 'regexp ":TIMESINK:")
+                   (org-agenda-skip-entry-if
+                    (quote scheduled)
+                    (quote deadline)))))
+                 (org-agenda-overriding-header "Tasks without set timeframe")
+                 (org-agenda-sorting-strategy
+                  (quote
+                   (priority-down))))))))))
   )
 
 (defun +org|setup-custom-links ()
@@ -195,6 +229,7 @@
      (?c . success))
    org-refile-targets
    '((nil :maxlevel . 3)
+     ("ideas.org" :level . 1)
      (org-agenda-files :maxlevel . 3))
    org-startup-folded t
    org-startup-indented t
