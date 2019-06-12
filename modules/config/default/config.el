@@ -295,7 +295,7 @@
         :gni [C-S-return]  #'+default/newline-above))
 
 
-(setq doom-font (font-spec :family "Hack" :size 16))
+(setq doom-font "Hack:style=Regular:size=16")
 ;;
 ;;; Bootstrap configs
 
