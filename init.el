@@ -85,3 +85,4 @@ decrease this. If you experience stuttering, increase this.")
 
 ;; Let 'er rip!
 (require 'core (concat user-emacs-directory "core/core"))
+(put 'narrow-to-region 'disabled nil)
