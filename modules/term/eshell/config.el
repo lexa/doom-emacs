@@ -44,9 +44,6 @@ You should use `det-eshell-alias!' to change this.")
 (defvar eshell-login-script (concat +eshell-config-dir "login"))
 
 
-(defvar +eshell--default-aliases nil)
-
-
 ;;
 ;; Packages
 
@@ -110,9 +107,9 @@ You should use `det-eshell-alias!' to change this.")
       (add-to-list 'eshell-visual-commands cmd)))
 
   (defun +eshell|init-aliases ()
-    (setq +eshell--default-aliases eshell-command-aliases-list
-          eshell-command-aliases-list
-          (append eshell-command-aliases-list
+    (defvar +eshell--default-aliases eshell-command-aliases-list)
+    (setq eshell-command-aliases-list
+          (append +eshell--default-aliases
                   +eshell-aliases)))
   (add-hook 'eshell-alias-load-hook #'+eshell|init-aliases)
 
