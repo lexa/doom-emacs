@@ -7,7 +7,7 @@
     ;; org-bbdb
     org-bibtex
     org-docview
-    ;; org-gnus
+    org-gnus
     org-info
     ;; org-irc
     ;; org-mhe
@@ -91,6 +91,60 @@
    org-agenda-start-day "-3d"))
 
 
+;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
+(defun my-org-agenda-skip-all-siblings-but-first ()
+  "Skip all but the first non-done entry."
+  (let (should-skip-entry)
+    (unless (org-current-is-todo)
+      (setq should-skip-entry t))
+    (save-excursion
+      (while (and (not should-skip-entry) (org-goto-sibling t))
+        (when (org-current-is-todo)
+          (setq should-skip-entry t))))
+    (when should-skip-entry
+      (or (outline-next-heading)
+          (goto-char (point-max))))))
+
+(defun org-current-is-todo ()
+  (string= "TODO" (org-get-todo-state)))
+
+(defun +org|setup-agenda-custom-command ()
+  "Set up custom commands"
+  (setq org-agenda-custom-commands
+   (quote
+    (("g" "GTD"
+      ((agenda "" ((org-agenda-span +2)
+                   (org-agenda-start-on-weekday nil)
+                   (org-agenda-start-day "today")))
+       (todo "" ((org-agenda-files (list "inbox.org"))
+                 (org-agenda-overriding-header "Unsorted Inbox")
+                 ))
+       (todo "" ((org-agenda-files (list "gtd.org"))
+                 (org-agenda-prefix-format " %i %-12:c")
+                 (org-agenda-overriding-header "Next action")
+                 (org-agenda-sorting-strategy (list 'tag-up))
+                 (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)
+                 ))
+       ))
+
+     ("x" "Stuff"
+      ((tags "TIMESINK"
+       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+        (org-agenda-overriding-header "Perpetually wating tasks"))
+                  )
+       (alltodo ""
+                ((org-agenda-skip-function
+                  (quote (or
+                          (org-agenda-skip-subtree-if 'regexp ":TIMESINK:")
+                   (org-agenda-skip-entry-if
+                    (quote scheduled)
+                    (quote deadline)))))
+                 (org-agenda-overriding-header "Tasks without set timeframe")
+                 (org-agenda-sorting-strategy
+                  (quote
+                   (priority-down))))))))))
+  )
+
 (defun +org|setup-custom-links ()
   "Set up custom org links."
   (setq org-link-abbrev-alist
@@ -142,6 +196,13 @@
 (defun +org|setup-ui ()
   "Configures the UI for `org-mode'."
   (setq-default
+   org-agenda-category-icon-alist
+   `(
+     ("TODO" ( ,(all-the-icons-faicon "check-square") . (width 64)))
+     ("emacs" "/usr/share/icons/hicolor/16x16/apps/emacs.png" nil nil :scale 100)
+     ("finance" ( ,(all-the-icons-faicon "eur") . (width 64)))
+     ("german" ( ,(all-the-icons-material "assignment") . (width 64)))
+     ("" ( ,(all-the-icons-octicon "eye") . (width 64))))
    org-adapt-indentation nil
    org-cycle-include-plain-lists t
    org-eldoc-breadcrumb-separator " → "
@@ -168,6 +229,7 @@
      (?c . success))
    org-refile-targets
    '((nil :maxlevel . 3)
+     ("ideas.org" :level . 1)
      (org-agenda-files :maxlevel . 3))
    org-startup-folded t
    org-startup-indented t
@@ -233,6 +295,11 @@ between the two."
         "C-c C-i"   #'org-toggle-inline-images
         [remap doom/backward-to-bol-or-indent]          #'org-beginning-of-line
         [remap doom/forward-to-last-non-comment-or-eol] #'org-end-of-line
+
+        [S-right] #'windmove-right
+        [S-left] #'windmove-left
+        [S-up] #'windmove-up
+        [S-down] #'windmove-down
 
         :localleader
         "'" #'org-edit-special
@@ -489,6 +556,7 @@ conditions where a window's buffer hasn't changed at the time this hook is run."
   (+org|setup-keybinds)
   (+org|setup-hacks)
   (+org|setup-custom-links)
+  (+org|setup-agenda-custom-command)
 
   (add-hook 'org-open-at-point-functions #'doom|set-jump)
 

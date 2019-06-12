@@ -16,6 +16,7 @@
       "<S-down>" #'windmove-down
 
       "M-g g" #'avy-goto-line
+      "C-c a" #'org-agenda
 
       "s-q" #'avy-goto-char
       (:when (featurep! :editor multiple-cursors)
@@ -29,6 +30,8 @@
       "<f5>" #'magit-status
 
       "M-z" #'zop-to-char
+
+      "<f7>" #'calc-dispatch
 )
 
 ;;

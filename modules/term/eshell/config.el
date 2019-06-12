@@ -139,10 +139,7 @@ redefines its keys every time `eshell-mode' is enabled."
           "C-c s" #'+eshell/split-below
           "C-c v" #'+eshell/split-right
           "C-c x" #'+eshell/kill-and-close
-          "C-c h" #'evil-window-left
-          "C-c j" #'evil-window-down
-          "C-c k" #'evil-window-up
-          "C-c l" #'evil-window-right
+          "C-d"   #'+eshell/quit-or-delete-char
           [remap split-window-below]  #'+eshell/split-below
           [remap split-window-right]  #'+eshell/split-right
           [remap doom/backward-to-bol-or-indent] #'eshell-bol

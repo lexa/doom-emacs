@@ -9,7 +9,7 @@
 ;;    ~/.emacs.d/bin/org-capture script). This can be invoked from qutebrowser,
 ;;    vimperator, dmenu or a global keybinding.
 
-(defvar +org-capture-todo-file "todo.org"
+(defvar +org-capture-todo-file "TODO.org"
   "Default target for todo entries.
 
 Is relative to `org-directory', unless it is absolute. Is used in Doom's default
@@ -30,6 +30,9 @@ target file.
 Is relative to `org-directory', unless it is absolute. Is used in Doom's default
 `org-capture-templates'.")
 
+(defvar +org-capture-inbox-file "inbox.org"
+  "Default target for new stuff")
+
 (setq org-default-notes-file (expand-file-name +org-capture-notes-file org-directory))
 
 
@@ -37,12 +40,24 @@ Is relative to `org-directory', unless it is absolute. Is used in Doom's default
 ;;; Bootstrap
 
 (setq org-capture-templates
-      '(("t" "Personal todo" entry
-         (file+headline +org-capture-todo-file "Inbox")
+      '(("i" "Inbox" entry
+         (file +org-capture-inbox-file)
          "* TODO %?\n%i\n%a" :prepend t :kill-buffer t)
-        ("n" "Personal notes" entry
-         (file+headline +org-capture-notes-file "Inbox")
-         "* %u %?\n%i\n%a" :prepend t :kill-buffer t)
+
+        ("t" "Ticker" entry
+         (file +org-capture-ticker-file)
+         "* TODO %?\n%i\n%a" :prepend t :kill-buffer t)
+        ("e" "Emacs todo" entry
+         (file "emacs.org")
+         "* TODO %?\n%U\n%i" :kill-buffer t)
+
+        ("g" "From Gnus" entry
+         (file +org-capture-inbox-file)
+         "* TODO %?\nLink: %a\n%i" :kill-buffer t)
+
+        ;; ("P" "Project" entry
+        ;;  (file "gtd.org")
+        ;;  "* %? [0%]" :kill-buffer t)
 
         ;; Will use {project-root}/{todo,notes,changelog}.org, unless a
         ;; {todo,notes,changelog}.org file is found in a parent directory.
