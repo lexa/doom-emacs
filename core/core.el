@@ -211,7 +211,6 @@ Doom was setup, which may cause problems.")
  tramp-auto-save-directory    (concat doom-cache-dir "tramp-auto-save/")
  tramp-backup-directory-alist backup-directory-alist
  tramp-persistency-file-name  (concat doom-cache-dir "tramp-persistency.el")
- tutorial--saved-dir          (concat doom-cache-dir "tutorial/")
  url-cache-directory          (concat doom-cache-dir "url/")
  url-configuration-directory  (concat doom-etc-dir "url/")
  gamegrid-user-score-file-directory (concat doom-etc-dir "games/"))
@@ -537,6 +536,8 @@ to least)."
   (require 'cl-lib)
   (unless EMACS26+
     (with-no-warnings
+      ;; `kill-current-buffer' was introduced in Emacs 26
+      (defalias 'kill-current-buffer #'kill-this-buffer)
       ;; if-let and when-let were moved to (if|when)-let* in Emacs 26+ so we
       ;; alias them for 25 users.
       (defalias 'if-let* #'if-let)

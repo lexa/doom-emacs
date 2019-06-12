@@ -190,11 +190,13 @@ read-only or not file-visiting."
  mouse-yank-at-point t           ; middle-click paste at point, not at click
  resize-mini-windows 'grow-only  ; Minibuffer resizing
  show-help-function nil          ; hide :help-echo text
- split-width-threshold 160       ; favor horizontal splits
  uniquify-buffer-name-style nil  ; custom modeline will show file paths anyway
  use-dialog-box nil              ; always avoid GUI
  visible-cursor nil
  x-stretch-cursor nil
+ ;; Favor vertical splits
+ split-width-threshold 160
+ split-height-threshold nil
  ;; `pos-tip' defaults
  pos-tip-internal-border-width 6
  pos-tip-border-width 1
@@ -473,7 +475,7 @@ Fonts are specified by `doom-font', `doom-variable-pitch-font',
 
 By default, this uses Apple Color Emoji on MacOS and Symbola on Linux."
   (when doom-unicode-font
-    (set-fontset-font t '(#x1F600 . #x1F64F) doom-unicode-font frame 'prepend)))
+    (set-fontset-font t 'unicode doom-unicode-font frame 'prepend)))
 
 (defun doom|init-theme (&optional frame)
   "Load the theme specified by `doom-theme' in FRAME."
@@ -572,7 +574,7 @@ it to fix all that visual noise."
 (doom-silence-motion-key delete-char "<delete>")
 
 ;; Switch to `doom-fallback-buffer' if on last real buffer
-(advice-add #'kill-this-buffer :around #'doom*switch-to-fallback-buffer-maybe)
+(advice-add #'kill-current-buffer :around #'doom*switch-to-fallback-buffer-maybe)
 
 (provide 'core-ui)
 ;;; core-ui.el ends here

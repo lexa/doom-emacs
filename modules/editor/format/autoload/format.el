@@ -5,7 +5,7 @@
 buffer.")
 
 ;;;###autoload
-(autoload 'format-all-probe "format-all")
+(autoload 'format-all--probe "format-all")
 
 (defun +format--delete-whole-line (&optional arg)
   "Delete the current line without putting it in the `kill-ring'.
@@ -93,7 +93,7 @@ Stolen shamelessly from go-mode"
 
 (defun +format-completing-read ()
   (require 'format-all)
-  (let* ((fmtlist (mapcar #'symbol-name (hash-table-keys format-all-format-table)))
+  (let* ((fmtlist (mapcar #'symbol-name (hash-table-keys format-all--format-table)))
          (fmt (completing-read "Formatter: " fmtlist)))
     (if fmt (cons (intern fmt) t))))
 
@@ -122,8 +122,8 @@ See `+format/buffer' for the interactive version of this function, and
 `+format|buffer' to use as a `before-save-hook' hook."
   (if (not formatter)
       'no-formatter
-    (let ((f-function (gethash formatter format-all-format-table))
-          (executable (format-all-formatter-executable formatter))
+    (let ((f-function (gethash formatter format-all--format-table))
+          (executable (format-all--formatter-executable formatter))
           (indent 0))
       (pcase-let
           ((`(,output ,errput ,first-diff)
@@ -145,8 +145,11 @@ See `+format/buffer' for the interactive version of this function, and
                   ((eq output t) 'noop)
                   ((let ((tmpfile (make-temp-file "doom-format"))
                          (patchbuf (get-buffer-create " *doom format patch*"))
-                         (coding-system-for-read 'utf-8)
-                         (coding-system-for-write 'utf-8))
+                         (coding-system-for-read coding-system-for-read)
+                         (coding-system-for-write coding-system-for-write))
+                     (unless IS-WINDOWS
+                       (setq coding-system-for-read 'utf-8
+                             coding-system-for-write 'utf-8))
                      (unwind-protect
                          (progn
                            (with-current-buffer patchbuf
@@ -177,7 +180,7 @@ See `+format/buffer' for the interactive version of this function, and
   "Format the source code in the current buffer."
   (interactive "P")
   (let ((+format-with (or (if arg (+format-completing-read)) +format-with)))
-    (pcase-let ((`(,formatter ,mode-result) (format-all-probe)))
+    (pcase-let ((`(,formatter ,mode-result) (format-all--probe)))
       (pcase
           (+format-buffer
            formatter mode-result
