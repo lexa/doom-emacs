@@ -15,7 +15,7 @@
        (start-process "" nil "evince" buffer-file-name))))
 
   (map! :map pdf-view-mode-map :gn "q" #'kill-this-buffer
-        "i" #'+pdf-tools-open-in-envice)
+        "&" #'+pdf-tools-open-in-evince)
 
   (defun +pdf|cleanup-windows ()
     "Kill left-over annotation buffers when the document is killed."
