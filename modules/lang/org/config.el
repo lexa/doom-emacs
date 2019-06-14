@@ -296,10 +296,10 @@ between the two."
         [remap doom/backward-to-bol-or-indent]          #'org-beginning-of-line
         [remap doom/forward-to-last-non-comment-or-eol] #'org-end-of-line
 
-        [S-right] #'windmove-right
-        [S-left] #'windmove-left
-        [S-up] #'windmove-up
-        [S-down] #'windmove-down
+        ;; [S-right] #'windmove-right
+        ;; [S-left] #'windmove-left
+        ;; [S-up] #'windmove-up
+        ;; [S-down] #'windmove-down
 
         :localleader
         "'" #'org-edit-special
