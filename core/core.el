@@ -268,7 +268,7 @@ enable multiple minor modes for the same regexp.")
   "Run `doom|run-local-var-hooks' if `enable-local-variables' is disabled."
   (unless enable-local-variables
     (doom|run-local-var-hooks)))
-(add-hook 'after-change-major-mode-hook #'doom|run-local-var-hooks-if-necessary)
+(add-hook 'after-change-major-mode-hook #'doom|run-local-var-hooks-if-necessary 'append)
 
 (defun doom|create-non-existent-directories ()
   "Automatically create missing directories when creating new files."
@@ -429,7 +429,8 @@ in interactive sessions, nil otherwise (but logs a warning)."
 
 (defun doom-load-env-vars (file)
   "Read and set envvars in FILE."
-  (let (vars)
+  (if (not (file-readable-p file))
+      (doom-log "Couldn't read %S envvar file" file)
     (with-temp-buffer
       (insert-file-contents file)
       (re-search-forward "\n\n" nil t)
@@ -442,7 +443,12 @@ in interactive sessions, nil otherwise (but logs a warning)."
                                   (line-beginning-position))
                                 (point-max))))))
             (setenv var value)))))
-    vars))
+    (setq exec-path (append (split-string (getenv "PATH")
+                                          (if IS-WINDOWS ";" ":"))
+                            (list exec-directory))
+          shell-file-name (or (getenv "SHELL")
+                              shell-file-name))
+    t))
 
 (defun doom-initialize (&optional force-p)
   "Bootstrap Doom, if it hasn't already (or if FORCE-P is non-nil).
@@ -473,6 +479,9 @@ The overall load order of Doom is as follows:
 Module load order is determined by your `doom!' block. See `doom-modules-dirs'
 for a list of all recognized module trees. Order defines precedence (from most
 to least)."
+  (add-to-list 'load-path doom-core-dir)
+  (require 'core-lib)
+
   (when (or force-p (not doom-init-p))
     (setq doom-init-p t)  ; Prevent infinite recursion
 
@@ -507,16 +516,9 @@ to least)."
         (user-error "Your package autoloads are missing! Run `bin/doom refresh' to regenerate them")))
 
     ;; Load shell environment
-    (when (and (not noninteractive)
-               (file-readable-p doom-env-file))
-      (doom-load-env-vars doom-env-file)
-      (setq exec-path (append (split-string (getenv "PATH")
-                                            (if IS-WINDOWS ";" ":"))
-                              (list exec-directory))
-            shell-file-name (or (getenv "SHELL")
-                                shell-file-name))))
+    (unless noninteractive
+      (doom-load-env-vars doom-env-file)))
 
-  (require 'core-lib)
   (require 'core-modules)
   (require 'core-os)
   (if noninteractive
@@ -530,20 +532,6 @@ to least)."
 
 ;;
 ;;; Bootstrap Doom
-
-(eval-and-compile
-  (require 'subr-x)
-  (require 'cl-lib)
-  (unless EMACS26+
-    (with-no-warnings
-      ;; `kill-current-buffer' was introduced in Emacs 26
-      (defalias 'kill-current-buffer #'kill-this-buffer)
-      ;; if-let and when-let were moved to (if|when)-let* in Emacs 26+ so we
-      ;; alias them for 25 users.
-      (defalias 'if-let* #'if-let)
-      (defalias 'when-let* #'when-let))))
-
-(add-to-list 'load-path doom-core-dir)
 
 (doom-initialize noninteractive)
 (unless noninteractive

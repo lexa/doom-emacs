@@ -307,6 +307,20 @@ The point of this is to avoid Emacs locking up indexing massive file trees."
 
          (#'counsel-file-jump))))
 
+(defvar +ivy-file-search-shell
+  (or (executable-find "dash")
+      (executable-find "sh")
+      shell-file-name)
+  "The SHELL to invoke ag/rg/pt/git-grep/grep searchs from.
+
+This only affects `+ivy/*' search commands (e.g. `+ivy/rg' and
+`+ivy/project-search').
+
+By default, this the most basic, uncustomized shell, to prevent interference
+caused by slow shell configs at the cost of isolating these programs from
+envvars that may have been set in the user's shell config to change their
+behavior. If this bothers you, change this to `shell-file-name'.")
+
 ;;;###autoload
 (cl-defun +ivy-file-search (engine &key query in all-files (recursive t))
   "Conduct a file search using ENGINE, which can be any of: rg, ag, pt, and
@@ -333,12 +347,22 @@ order.
                           'grep)
                      (error "No search engine specified (is ag, rg, pt or git installed?)")))
          (query
-          (or (if query (rxt-quote-pcre query))
+          (or (if query query)
               (when (use-region-p)
                 (let ((beg (or (bound-and-true-p evil-visual-beginning) (region-beginning)))
                       (end (or (bound-and-true-p evil-visual-end) (region-end))))
                   (when (> (abs (- end beg)) 1)
-                    (rxt-quote-pcre (buffer-substring-no-properties beg end)))))))
+                    (let ((query (buffer-substring-no-properties beg end)))
+                      ;; Escape characters that are special to ivy searches
+                      (replace-regexp-in-string "[! |]" (lambda (substr)
+                                                          (cond ((and (featurep! +fuzzy)
+                                                                      (string= substr " "))
+                                                                 "  ")
+                                                                ((and (string= substr "|")
+                                                                      (eq engine 'rg))
+                                                                 "\\\\\\\\|")
+                                                                ((concat "\\\\" substr))))
+                                                (regexp-quote query))))))))
          (prompt
           (format "%s%%s %s"
                   (symbol-name engine)
@@ -349,7 +373,8 @@ order.
                         ((file-relative-name directory project-root))))))
     (require 'counsel)
     (let ((ivy-more-chars-alist
-           (if query '((t . 1)) ivy-more-chars-alist)))
+           (if query '((t . 1)) ivy-more-chars-alist))
+          (shell-file-name +ivy-file-search-shell))
       (pcase engine
         (`grep
          (let ((counsel-projectile-grep-initial-input query))

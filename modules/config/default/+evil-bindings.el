@@ -54,27 +54,60 @@
       ;; misc
       :n "C-S-f"  #'toggle-frame-fullscreen
 
-      ;; Global evil keybinds
-      :m  "]a"    #'evil-forward-arg
-      :m  "[a"    #'evil-backward-arg
-      :m  "]o"    #'outline-next-visible-heading
-      :m  "[o"    #'outline-previous-visible-heading
+      ;; ported from vim
+      :m  "]m"    #'+evil/next-beginning-of-method
+      :m  "[m"    #'+evil/previous-beginning-of-method
+      :m  "]M"    #'+evil/next-end-of-method
+      :m  "[M"    #'+evil/previous-end-of-method
+      :m  "]#"    #'+evil/next-preproc-directive
+      :m  "[#"    #'+evil/previous-preproc-directive
+      :m  "]*"    #'+evil/next-comment
+      :m  "[*"    #'+evil/previous-comment
+      :m  "]\\"   #'+evil/next-comment
+      :m  "[\\"   #'+evil/previous-comment
+      :nv "z="    #'flyspell-correct-word-generic
+      :v  "@"     #'+evil:apply-macro
+
+      ;; ported from vim-unimpaired
+      :n  "] SPC" #'+evil/insert-newline-below
+      :n  "[ SPC" #'+evil/insert-newline-above
       :n  "]b"    #'next-buffer
       :n  "[b"    #'previous-buffer
-      :n  "zx"    #'kill-current-buffer
-      :n  "ZX"    #'bury-buffer
+      :n  "]f"    #'+evil/next-file
+      :n  "[f"    #'+evil/previous-file
+      :m  "]u"    #'+evil:url-encode
+      :m  "[u"    #'+evil:url-decode
+      :m  "]y"    #'+evil:c-string-encode
+      :m  "[y"    #'+evil:c-string-decode
+      ;; NOTE hl-todo-{next,previous} have ]t/[t, use ]F/[F instead
+      ;; NOTE {next,previous}-error have ]e/[e, use ddp/ddP or gx instead
+      (:when (featurep! :lang web)
+        :m "]x" #'+web:encode-html-entities
+        :m "[x" #'+web:decode-html-entities)
+
+      ;; custom vim-unmpaired-esque keys
+      :m  "]a"    #'evil-forward-arg
+      :m  "[a"    #'evil-backward-arg
+      :n  "]F"    #'+evil/next-frame
+      :n  "[F"    #'+evil/previous-frame
+      :m  "]h"    #'outline-next-visible-heading
+      :m  "[h"    #'outline-previous-visible-heading
+      :n  "[o"    #'+evil/insert-newline-above
+      :n  "]o"    #'+evil/insert-newline-below
       :n  "gp"    #'+evil/reselect-paste
+      :v  "gp"    #'+evil/paste-preserve-register
+      :nv "g@"    #'+evil:apply-macro
+      :nv "gc"    #'evil-commentary
+      :nv "gx"    #'evil-exchange
       :n  "g="    #'evil-numbers/inc-at-pt
       :n  "g-"    #'evil-numbers/dec-at-pt
       :v  "g="    #'evil-numbers/inc-at-pt-incremental
       :v  "g-"    #'evil-numbers/dec-at-pt-incremental
       :v  "g+"    #'evil-numbers/inc-at-pt
-      :nv "z="    #'flyspell-correct-word-generic
-      :nv "g@"    #'+evil:apply-macro
-      :nv "gc"    #'evil-commentary
-      :nv "gx"    #'evil-exchange
-      :v  "gp"    #'+evil/paste-preserve-register
-      :v  "@"     #'+evil:apply-macro
+
+      ;; custom evil keybinds
+      :n  "zx"    #'kill-current-buffer
+      :n  "ZX"    #'bury-buffer
       ;; repeat in visual mode (FIXME buggy)
       :v  "."     #'+evil:apply-macro
       ;; don't leave visual mode after shifting
@@ -620,6 +653,7 @@
         (:when (featurep! :tools magit)
           :desc "Magit dispatch"            "/"   #'magit-dispatch
           :desc "Forge dispatch"            "'"   #'forge-dispatch
+          :desc "Magit switch branch"       "b"   #'magit-branch-checkout
           :desc "Magit status"              "g"   #'magit-status
           :desc "Magit file delete"         "x"   #'magit-file-delete
           :desc "Magit blame"               "B"   #'magit-blame-addition
@@ -654,6 +688,7 @@
             :desc "Initialize repo"           "r"   #'magit-init
             :desc "Clone repo"                "R"   #'+magit/clone
             :desc "Commit"                    "c"   #'magit-commit-create
+            :desc "Branch"                    "b"   #'magit-branch-and-checkout
             :desc "Issue"                     "i"   #'forge-create-issue
             :desc "Pull request"              "p"   #'forge-create-pullreq)))
 
