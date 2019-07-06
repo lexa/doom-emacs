@@ -9,7 +9,7 @@
 ;;    ~/.emacs.d/bin/org-capture script). This can be invoked from qutebrowser,
 ;;    vimperator, dmenu or a global keybinding.
 
-(defvar +org-capture-todo-file "TODO.org"
+(defvar +org-capture-todo-file "~/org/TODO.org"
   "Default target for todo entries.
 
 Is relative to `org-directory', unless it is absolute. Is used in Doom's default
@@ -21,7 +21,7 @@ Is relative to `org-directory', unless it is absolute. Is used in Doom's default
 Is relative to `org-directory' unless it is absolute. Is used in Doom's default
 `org-capture-templates'.")
 
-(defvar +org-capture-notes-file "notes.org"
+(defvar +org-capture-notes-file "~/org/notes.org"
   "Default target for storing notes.
 
 Used as a fall back file for org-capture.el, for templates that do not specify a
@@ -30,7 +30,7 @@ target file.
 Is relative to `org-directory', unless it is absolute. Is used in Doom's default
 `org-capture-templates'.")
 
-(defvar +org-capture-inbox-file "inbox.org"
+(defvar +org-capture-inbox-file "~/org/inbox.org"
   "Default target for new stuff")
 
 (setq org-default-notes-file (expand-file-name +org-capture-notes-file org-directory))
