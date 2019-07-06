@@ -194,8 +194,7 @@ Doom was setup, which may cause problems.")
                    "gnutls-cli -p %p %h"
                    "openssl s_client -connect %h:%p -no_ssl2 -no_ssl3 -ign_eof")
  ;; Don't store authinfo in plain text!
- auth-sources (list (expand-file-name "authinfo.gpg" doom-etc-dir)
-                    "~/.authinfo.gpg")
+ auth-sources (list "~/.authinfo")
  ;; Don't litter `doom-emacs-dir'
  abbrev-file-name             (concat doom-local-dir "abbrev.el")
  async-byte-compile-log-file  (concat doom-etc-dir "async-bytecomp.log")
