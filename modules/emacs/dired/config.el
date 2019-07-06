@@ -5,6 +5,7 @@
   :init
   (setq ;; Always copy/delete recursively
         dired-recursive-copies  'always
+        dired-dwim-target t
         dired-recursive-deletes 'top
         ;; Auto refresh dired, but be quiet about it
         dired-hide-details-hide-symlink-targets nil
