@@ -2,3 +2,4 @@
 ;;; app/jira/packages.el
 
 (package! browse-at-remote)
+(package! request)
