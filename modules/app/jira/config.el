@@ -12,5 +12,4 @@
 
 (map! :leader
       (:prefix ("j" . "Jira/Stash")
-        "j" #'+jira-open-at-point
         "b" #'browse-at-remote))
