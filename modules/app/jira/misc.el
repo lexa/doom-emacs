@@ -2,7 +2,7 @@
 
 ;; Recognize Jira issues
 (setq bug-reference-url-format "https://jira.opensynergy.com/browse/%s")
-(setq bug-reference-bug-regexp "\\(COQOS-[0-9]+\\|HV-[0-9]+\\)")
+(setq bug-reference-bug-regexp "\\(\\)\\(COQOS-[0-9]+\\|HV-[0-9]+\\)")
 
 ;;
 ;;

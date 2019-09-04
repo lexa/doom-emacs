@@ -1,6 +1,7 @@
 ;;; app/jira/config.el -*- lexical-binding: t; -*-
 
 (load! "func.el")
+(load! "misc.el")
 
 (def-package! browse-at-remote
   :commands browse-at-remote
