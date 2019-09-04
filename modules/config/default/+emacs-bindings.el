@@ -69,6 +69,7 @@
         :desc "Browse private config"       "c"   #'doom/open-private-config
         :desc "Find file in private config" "C"   #'doom/find-file-in-private-config
         :desc "Find directory"              "d"   #'dired
+        :desc "Grep the project"            "g"   #'counsel-projectile
         :desc "Find file in emacs.d"        "e"   #'+default/find-in-emacsd
         :desc "Browse emacs.d"              "E"   #'+default/browse-emacsd
         :desc "Find file from here"         "f"   (if (fboundp 'counsel-file-jump) #'counsel-file-jump #'find-file)
@@ -269,7 +270,7 @@
       ;;; search
       (:when (featurep! :completion ivy)
         "C-S-s"        #'swiper
-        "C-S-r"        #'ivy-resume)
+        "C-c C-r"      #'ivy-resume)
       (:when (featurep! :completion helm)
         "C-S-s"        #'swiper-helm
         "C-S-r"        #'helm-resume)
