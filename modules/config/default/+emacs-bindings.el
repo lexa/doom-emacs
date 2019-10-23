@@ -48,6 +48,8 @@
       :desc "Evaluate line/region"        "e"   #'+eval/line-or-region
       :desc "Open scratch buffer"         "bs"  #'doom/open-scratch-buffer
       :desc "Open project scratch buffer" "X"   #'doom/open-project-scratch-buffer
+      :desc "Man page"                    "hm"  #'man
+
 
       (:when (featurep! :term term)
         :desc "Toggle term popup"     "`" #'+term/toggle
