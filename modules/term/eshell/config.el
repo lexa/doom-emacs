@@ -25,7 +25,7 @@ buffer.")
     ("bd" "eshell-up $1")
     ("rg" "rg --color=always $*")
     ("ag" "ag --color=always $*")
-    ("e" "find-file")
+    ("e" "find-file $1")
     ("l"  "ls -lh")
     ("ll" "ls -lah")
     ("clear" "clear-scrollback")) ; more sensible than default
