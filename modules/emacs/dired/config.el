@@ -145,6 +145,10 @@ we have to clean it up ourselves."
       "e" #'my-dired-ediff-files
       )
 
+(def-package! dired-git-info
+  :general (dired-mode-map ")" #'dired-git-info-mode))
+
+;;
 ;;
 ;;; Evil integration
 
