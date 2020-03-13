@@ -33,6 +33,7 @@ Is relative to `org-directory', unless it is absolute. Is used in Doom's default
 (defvar +org-capture-inbox-file "~/org/inbox.org"
   "Default target for new stuff")
 
+(defvar +org-capture-ticker-file "~/org/ticker.org")
 (setq org-default-notes-file (expand-file-name +org-capture-notes-file org-directory))
 
 
@@ -54,6 +55,11 @@ Is relative to `org-directory', unless it is absolute. Is used in Doom's default
         ("g" "From Gnus" entry
          (file +org-capture-inbox-file)
          "* TODO %?\nLink: %a\n%i" :kill-buffer t)
+
+        ("n" "Daily review" entry
+         (file+headline +org-capture-ticker-file "Daily review")
+         "** note %U\n Mood: %^{mood|neutral|great|good|bad|terrible}\n\n %?<What have I done today?>" :prepend t
+         )
 
         ;; ("P" "Project" entry
         ;;  (file "gtd.org")
