@@ -42,3 +42,9 @@
       (kbd "C-w") #'vterm--self-insert
       (kbd "C-y") #'vterm--self-insert
       (kbd "C-z") #'vterm--self-insert)))
+
+(def-package! eterm-256color
+  :defer t
+  :config
+  (setq vterm-term-environment-variable "eterm-color")
+  )
